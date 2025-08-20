@@ -10,8 +10,20 @@
   </div>
   <div class="mt-40 text-center">
     <div class="mt-20 text-center text-secondary border-placeholder">
-      Add details about the payment here!
+      <h2>Thank you purchasing! Have a good read!</h2>
+      <p>Confirmation of Purchase!</p>
+      <!-- Display total amount charged  -->
+      <div class="mt-20 text-center text-secondary border-placeholder"> 
+        <strong> Total Amount: $</strong> 
+        <span id="total-amount"> {{amount}}</span>
+      </div>
+      <!-- Display payment intent ID -->
+      <div class="mt-20 text-center text-secondary border-placeholder"> 
+        <strong> Payment Intent ID: </strong> 
+        <span id="payment-intent-id"> {{paymentIntentId}}</span>
+      </div>
     </div>
   </div>
 </main>
 {% endblock %}
+

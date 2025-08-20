@@ -2,7 +2,9 @@ import os
 import stripe
 
 from dotenv import load_dotenv
-from flask import Flask, request, render_template
+from flask import Flask, jsonify, request, render_template
+
+from stripe import PaymentIntent  
 
 load_dotenv()
 
@@ -11,10 +13,41 @@ app = Flask(__name__,
   template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "views"),
   static_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), "public"))
 
+# Configure Stripe API
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
+
 # Home route
 @app.route('/', methods=['GET'])
 def index():
   return render_template('index.html')
+
+# Get Stripe publishable key 
+@app.route('/config', methods=['GET'] )
+def get_config():
+  return jsonify({"publishableKey":os.getenv("STRIPE_PUBLISHABLE_KEY")})
+
+# Create payment intent when user select a book to purchase 
+@app.route('/create-payment-intent', methods=['POST'])
+def create_payment_intent():
+  try:
+    data = request.json
+    amount = int(data.get('amount',0)) # Get the amount, default to 0 if no amount is provided 
+
+    if amount <= 0:
+      return jsonify({"error":"Invalid amount"}), 400 # Prevent invalid payments
+    
+    payment_intent = stripe.PaymentIntent.create(
+      amount = amount, 
+      currency = "gbp",
+      automatic_payment_methods = {"enabled":True}
+    )
+    print(amount)
+    print(f"Payment Intent Created:  {payment_intent.id}, Client Secret: {payment_intent.client_secret}")
+    return jsonify({"clientSecret":payment_intent.client_secret})
+  
+  except Exception as e: 
+    return jsonify(error=str(e)), 400
+
 
 # Checkout route
 @app.route('/checkout', methods=['GET'])
