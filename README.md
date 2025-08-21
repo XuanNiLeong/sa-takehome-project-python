@@ -1,5 +1,5 @@
 # Stripe E-Commerce Payment Project (Xuan's SA Take-Home Project)
-A simple e-commerce application built in Python using the Flask framework, demonstrating Stripe payment integration with Stripe's Payment Element.
+A simple e-commerce application built in Python using the Flask framework, demonstrating Stripe payment integration with Stripe's Payment Element. The Stripe test account is set to the United Kingdom region, so it uses the payment methods available in the UK.
 
 
 
